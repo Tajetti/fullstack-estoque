@@ -51,7 +51,9 @@ defineProps({
             </td>
             <td>{{ formatarData(curso.created_at) }}</td>
             <td>
-                <img class="course-image" :src="courseImage" alt="Imagem do curso" />
+              <RouterLink :to="`/curso/editar/${curso.id}`">
+                <img class="course-image" :src="courseImage" alt="Editar curso" />
+              </RouterLink>
             </td>
           </tr>
         </tbody>
