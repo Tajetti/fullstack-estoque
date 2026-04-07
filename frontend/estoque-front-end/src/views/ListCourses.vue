@@ -4,6 +4,7 @@ import CoursesTable from '../components/CoursesTable.vue'
 
 const cursos = ref([])
 const carregando = ref(true)
+const excluindoId = ref('')
 const erro = ref('')
 
 function formatarData(valor) {
@@ -39,6 +40,32 @@ async function carregarCursos() {
   }
 }
 
+async function excluirCurso(id) {
+  const confirmar = window.confirm('Tem certeza que deseja excluir este curso?')
+
+  if (!confirmar) return
+
+  excluindoId.value = id
+  erro.value = ''
+
+  try {
+    const resposta = await fetch(`/curso/delete/${id}`, {
+      method: 'DELETE',
+    })
+
+    if (!resposta.ok) {
+      const mensagem = await resposta.text()
+      throw new Error(mensagem || 'Nao foi possivel excluir o curso.')
+    }
+
+    cursos.value = cursos.value.filter((curso) => curso.id !== id)
+  } catch (error) {
+    erro.value = error instanceof Error ? error.message : 'Erro inesperado ao excluir o curso.'
+  } finally {
+    excluindoId.value = ''
+  }
+}
+
 onMounted(carregarCursos)
 </script>
 
@@ -60,8 +87,10 @@ onMounted(carregarCursos)
     <CoursesTable
       :cursos="cursos"
       :carregando="carregando"
+      :excluindo-id="excluindoId"
       :erro="erro"
       :formatar-data="formatarData"
+      @excluir-curso="excluirCurso"
     />
   </main>
 </template>

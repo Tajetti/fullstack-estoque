@@ -1,5 +1,6 @@
 <script setup>
 import courseImage from '../assets/image.png'
+import deleteImage from '../assets/excluir.png'
 
 defineProps({
   cursos: {
@@ -14,11 +15,17 @@ defineProps({
     type: String,
     default: '',
   },
+  excluindoId: {
+    type: String,
+    default: '',
+  },
   formatarData: {
     type: Function,
     required: true,
   },
 })
+
+defineEmits(['excluirCurso'])
 </script>
 
 <template>
@@ -37,6 +44,7 @@ defineProps({
             <th>Status</th>
             <th>Criado em</th>
             <th>Editar</th>
+            <th>Excluir</th>
           </tr>
         </thead>
         <tbody>
@@ -54,6 +62,16 @@ defineProps({
               <RouterLink :to="`/curso/editar/${curso.id}`">
                 <img class="course-image" :src="courseImage" alt="Editar curso" />
               </RouterLink>
+            </td>
+            <td>
+              <button
+                type="button"
+                class="delete-button"
+                :disabled="excluindoId === curso.id"
+                @click="$emit('excluirCurso', curso.id)"
+              >
+                <img class="course-image" :src="deleteImage" alt="Deletar curso" />
+              </button>
             </td>
           </tr>
         </tbody>
@@ -119,6 +137,17 @@ thead th {
 
 .course-edit-link {
   display: inline-flex;
+}
+
+.delete-button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.delete-button:disabled {
+  opacity: 0.7;
+  cursor: default;
 }
 
 .course-image {
