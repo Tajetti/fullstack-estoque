@@ -12,8 +12,9 @@ const erro = ref('')
 
 const curso = reactive({
   name: '',
-  description: '',
+  category: '',
   professor: '',
+  active: true,
 })
 
 async function carregarCurso() {
@@ -29,8 +30,9 @@ async function carregarCurso() {
 
     const dados = await resposta.json()
     curso.name = dados.name ?? ''
-    curso.description = dados.description ?? ''
+    curso.category = dados.category ?? ''
     curso.professor = dados.professor ?? ''
+    curso.active = dados.active ?? true
   } catch (error) {
     erro.value = error instanceof Error ? error.message : 'Erro inesperado ao carregar o curso.'
   } finally {
@@ -93,17 +95,18 @@ onMounted(carregarCurso)
           </label>
 
           <label>
-            <span>Descrição</span>
-            <textarea
-              v-model.trim="curso.description"
-              placeholder="Ex.: Curso completo de Angular do zero ao avançado."
-              rows="4"
-            />
+            <span>Categoria</span>
+            <input v-model.trim="curso.category" type="text" placeholder="Ex.: Frontend" />
           </label>
 
           <label>
             <span>Professor</span>
             <input v-model.trim="curso.professor" type="text" placeholder="Ex.: Ciclano" required />
+          </label>
+
+          <label class="checkbox-row">
+            <input v-model="curso.active" type="checkbox" />
+            <span>Curso ativo</span>
           </label>
         </div>
 
@@ -194,8 +197,7 @@ label span {
   color: #334155;
 }
 
-input[type='text'],
-textarea {
+input[type='text'] {
   width: 100%;
   border: 1px solid #d6dde7;
   border-radius: 10px;
@@ -203,15 +205,25 @@ textarea {
   background: #fff;
   font-family: inherit;
   font-size: inherit;
-  resize: vertical;
   box-sizing: border-box;
 }
 
-input[type='text']:focus,
-textarea:focus {
+input[type='text']:focus {
   outline: none;
   border-color: #1d4ed8;
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.checkbox-row input {
+  width: 18px;
+  height: 18px;
 }
 
 .feedback-group {
