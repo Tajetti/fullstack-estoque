@@ -1,4 +1,6 @@
 <script setup>
+import courseImage from '../assets/image.png'
+
 defineProps({
   cursos: {
     type: Array,
@@ -34,6 +36,7 @@ defineProps({
             <th>Professor</th>
             <th>Status</th>
             <th>Criado em</th>
+            <th>Editar</th>
           </tr>
         </thead>
         <tbody>
@@ -47,6 +50,9 @@ defineProps({
               </span>
             </td>
             <td>{{ formatarData(curso.created_at) }}</td>
+            <td>
+                <img class="course-image" :src="courseImage" alt="Imagem do curso" />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -107,5 +113,18 @@ thead th {
 .status-badge.is-inactive {
   background: #ffebee;
   color: #c62828;
+}
+
+.course-edit-link {
+  display: inline-flex;
+}
+
+.course-image {
+  display: block;
+  width: 25px;
+  height: 25px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
 }
 </style>
